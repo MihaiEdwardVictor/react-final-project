@@ -13,9 +13,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/favorites" element={<Favorites/>}/>
-          <Route path="*" element={<PageNotFound/>}/>
           <Route path="/movie/:id" element={<MovieDetails/>} />
           <Route path="/" element={<Navbar />} />
+          <Route path="*" element={<PageNotFound/>}/>
         </Routes>
       </BrowserRouter>
     </div>
