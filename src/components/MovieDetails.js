@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./NavBar";
-import starIcon from "../assets/images/star_icon.png";
+import starIcon from "../assets/images/star_icon.png.png"
 import "../assets/other stuff/stylings/MovieDetails.css";
 import { Footer } from "./Footer";
 
