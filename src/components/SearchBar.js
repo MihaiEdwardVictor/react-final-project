@@ -20,6 +20,8 @@ export const SearchBar = () => {
       if (data.results.length > 0) {
         const movieId = data.results[0].id;
         navigate(`/movie/${movieId}`);
+      }else{
+        navigate('/*');
       }
     } catch (error) {
       console.error('Error searching for movies:', error);
