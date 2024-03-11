@@ -1,12 +1,15 @@
-// MovieDetails.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./NavBar";
+import starIcon from "../assets/images/star_icon.png";
+import "../assets/other stuff/stylings/MovieDetails.css";
+import { Footer } from "./Footer";
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [cast, setCast] = useState([]);
+  const [trailerKey, setTrailerKey] = useState(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -20,24 +23,38 @@ const MovieDetails = () => {
       };
 
       try {
-        const [detailsResponse, creditsResponse] = await Promise.all([
-          fetch(
-            `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
-            options
-          ),
-          fetch(
-            `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
-            options
-          ),
-        ]);
+        const [detailsResponse, creditsResponse, videosResponse] =
+          await Promise.all([
+            fetch(
+              `https://api.themoviedb.org/3/movie/${id}?language=en-US`,
+              options
+            ),
+            fetch(
+              `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+              options
+            ),
+            fetch(
+              `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+              options
+            ),
+          ]);
 
-        const [detailsData, creditsData] = await Promise.all([
+        const [detailsData, creditsData, videosData] = await Promise.all([
           detailsResponse.json(),
           creditsResponse.json(),
+          videosResponse.json(),
         ]);
 
         setMovie(detailsData);
         setCast(creditsData.cast);
+
+        // Find the first trailer key in the videos data
+        const trailer = videosData.results.find(
+          (video) => video.type === "Trailer"
+        );
+        if (trailer) {
+          setTrailerKey(trailer.key);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -50,24 +67,56 @@ const MovieDetails = () => {
     return <p>Loading...</p>;
   }
 
+  // Round the rating to 1 decimal
+  const roundedRating = movie.vote_average.toFixed(1);
+
   return (
     <>
-      <Navbar/>
-      <div>
-        <h1>{movie.title}</h1>
-        <p>Release Date: {movie.release_date}</p>
-        <p>Overview: {movie.overview}</p>
+      <Navbar />
+      <div className="movie-details-container">
+        <div className="movie-details-header">
+          <h1>{movie.title}</h1>
+          <img
+            className="movie-poster"
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+          />
+        </div>
+        <div className="movie-details-content">
+          <p>
+            <strong>Release Date:</strong> {movie.release_date}
+          </p>
+          <p>
+            <strong>Overview:</strong> {movie.overview}
+          </p>
+          <p className="d-flex align-items-center">
+            <strong>Rating:</strong> {roundedRating} / 10
+            <img className="rating-icon" src={starIcon} alt="Star Icon" />
+          </p>
+          {/* Display Cast Information */}
+          <div>
+            <h2>Cast</h2>
+            <p>{cast.map((actor) => actor.name).join(", ")}</p>
+          </div>
 
-        {/* Display Cast Information */}
-        <div>
-          <h2>Cast</h2>
-          <ul>
-            {cast.map((actor) => (
-              <li key={actor.id}>{actor.name}</li>
-            ))}
-          </ul>
+          {/* Display Trailer */}
+          {trailerKey && (
+            <div className="video-container">
+              <h2>Trailer</h2>
+              <div className="embed-responsive embed-responsive-16by9">
+                <iframe
+                  className="embed-responsive-item"
+                  src={`https://www.youtube.com/embed/${trailerKey}`}
+                  title="Trailer"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      <Footer></Footer>
     </>
   );
 };

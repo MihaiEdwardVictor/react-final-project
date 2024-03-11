@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap styles
 import Navbar from "../components/NavBar";
+import { Footer } from "../components/Footer";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -48,6 +49,8 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+
+      <Footer></Footer>
     </>
   );
 };

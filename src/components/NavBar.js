@@ -1,6 +1,7 @@
 // Navbar.js
 import React from "react";
 import { Link } from "react-router-dom";
+import { SearchBar } from "./SearchBar";
 
 const Navbar = () => {
   return (
@@ -39,17 +40,8 @@ const Navbar = () => {
             </li>
           </ul>
 
-          <form className="form ms-auto">
-            <input
-              className="form-control"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-          </form>
-          <button className="btn btn-outline-light ms-2" type="submit">
-            Search
-          </button>
+          <SearchBar/>
+
         </div>
       </div>
     </nav>
