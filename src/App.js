@@ -11,7 +11,7 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/react-final-project" element={<HomePage/>}/>
+          <Route path="/react-final-project/" element={<HomePage/>}/>
           <Route path="/favorites" element={<Favorites/>}/>
           <Route path="/movie/:id" element={<MovieDetails/>} />
           <Route path="/" element={<Navbar />} />
